@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Learn JavaScript</title>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
   </head>
@@ -11,36 +12,31 @@
   </header>
   <body>
     <form id="code-form" action="/" method="POST"></form>
+
     <div id="coding-challenge">
-      <p id="text-problem">Refactor this code</p>
-      <div id="line-numbers-and-code">
-        <div id="line-numbers"></div>
-        <textarea
-          id="code-input"
-          name="code"
-          placeholder=""
-          type="text"
-          draggable="false"
-          autofocus="false"
-          form="code-form"
-        ></textarea>
-      </div>
+      <div id="monaco-editor"></div>
     </div>
+
     <div id="buttons-and-progress">
       <progress id="progress-bar" value="0.01"></progress>
       <div id="buttons-container">
-        <button class="change-problem-button">Back</button>
+        <button class="change-problem-buttons">Back</button>
         <button form="code-form" id="submit-button" type="submit">
           Submit Solution
         </button>
-        <button class="change-problem-button">Next</button>
+        <button class="change-problem-buttons">Next</button>
       </div>
     </div>
   </body>
-  <script>
-    let lineNumbers = Array.from({ length: 41 }, (_, i) =>
-      i == 0 ? undefined : `${i}\n`
-    );
-    document.querySelector("#line-numbers").innerHTML = lineNumbers;
+  <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
+
+  <script type="module">
+    import * as monaco from "./node_modules/monaco-editor/esm/vs/editor/editor.all.js";
+    monaco.editor.create(document.getElementById("monaco-editor"), {
+      value: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
+        "\n"
+      ),
+      language: "javascript",
+    });
   </script>
 </html>

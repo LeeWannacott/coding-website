@@ -4,49 +4,6 @@
   font-weight: 400;
   src: local("IBMPlexMono.ttf"), format("truetype");
 }
-
-#text-problem {
-  margin-left: 15vw;
-}
-
-#coding-challenge {
-  margin-top: 5vh;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-}
-
-#code-input {
-  padding: 10px;
-  text-indent: 0px;
-  resize: vertical;
-  height: 60vh;
-  width: 70vw;
-  font-size: 1rem;
-  border-left: none;
-  font-family: IBM Plex Mono;
-  background-color: white;
-}
-
-#line-numbers-and-code {
-  display: flex;
-  justify-content: center;
-}
-
-#line-numbers {
-  padding-top: 10px;
-  padding-right: 2px;
-  width: 4ch;
-  font-size: 1rem;
-  display: flex;
-  text-align: right;
-  resize: none;
-  font-family: IBM Plex Mono;
-  overflow: hidden;
-  background-color: #f1f1f1;
-}
-
 #navbar {
   display: flex;
   flex-direction: row;
@@ -56,9 +13,30 @@
   background-color: #f1f1f1;
 }
 
-#buttons-container {
+#text-problem {
+  margin-left: 15vw;
+  background-color: red;
+  color: purple;
+  font-size: 100em;
+}
+
+#coding-challenge {
+  margin-top: 5vh;
   display: flex;
   justify-content: center;
+  flex-direction: row;
+}
+
+#monaco-editor {
+  padding: 10px;
+  text-indent: 0px;
+  resize: vertical;
+  height: 60vh;
+  width: 70vw;
+  font-size: 1rem;
+  border-left: none;
+  font-family: IBM Plex Mono;
+  border: 1px solid black;
 }
 
 #buttons-and-progress {
@@ -69,7 +47,7 @@
 }
 
 #progress-bar {
-  margin-left: 30px;
+  padding:5px;
   width: 70vw;
 }
 
@@ -82,7 +60,7 @@
   cursor: pointer;
 }
 
-.change-problem-button {
+.change-problem-buttons {
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;

@@ -69,7 +69,8 @@ func test(w http.ResponseWriter, request *http.Request) {
 		// fmt.Fprintf(w, "Name = %s\n", code)
 		// fmt.Println("Code: ", request)
 
-		http.ServeFile(w, request, "index.html")
+		// http.ServeFile(w, request, "index.html")
+		// http.Redirect(w, request, "http://localhost:8080", http.StatusSeeOther)
 		// http.PostForm("http://localhost:8080", request.Form)
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
