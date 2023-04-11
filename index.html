@@ -30,13 +30,6 @@
   </body>
   <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
 
-  <script type="module">
-    import * as monaco from "./node_modules/monaco-editor/esm/vs/editor/editor.all.js";
-    monaco.editor.create(document.getElementById("monaco-editor"), {
-      value: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
-        "\n"
-      ),
-      language: "javascript",
-    });
+  <script type="module" src="./js/index.js">
   </script>
 </html>
