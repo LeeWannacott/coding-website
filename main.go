@@ -26,14 +26,11 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		}
 		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
 		code := request.FormValue("code")
-		validCode := "test"
-		if code == validCode {
-			fmt.Println("Valid Code")
-		}
 		fmt.Println(code)
 		// fmt.Fprintf(w, "Name = %s\n", code)
 		// fmt.Println("Code: ", request)
-		w.Header().Set("Content-Type", "text/plain")
+		// w.Header().Set("Content-Type", "text/plain")
+		// w.Header().Set("Access-Control-Allow-Origin", "*")
 		http.ServeFile(w, request, "index.html")
 		// http.PostForm("http://localhost:8080", request.Form)
 	default:
