@@ -25,12 +25,13 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 			return
 		}
 		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
-		code := request.FormValue("code")
-		fmt.Println(code)
+		code := request.Form
+		fmt.Println("code: ", code)
 		// fmt.Fprintf(w, "Name = %s\n", code)
 		// fmt.Println("Code: ", request)
 		// w.Header().Set("Content-Type", "text/plain")
 		// w.Header().Set("Access-Control-Allow-Origin", "*")
+		// fmt.Println(w, request)
 		http.ServeFile(w, request, "index.html")
 		// http.PostForm("http://localhost:8080", request.Form)
 	default:
@@ -40,8 +41,8 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 
 func main() {
 
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/tmp/", http.StripPrefix("/tmp/", http.FileServer(http.Dir("tmp"))))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	http.Handle("/node_modules/", http.StripPrefix("/node_modules/", http.FileServer(http.Dir("node_modules"))))
 	http.HandleFunc("/", codeChallenge)

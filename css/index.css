@@ -25,7 +25,7 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
-  font-size: .4rem;
+  font-size: .1rem;
   font-family: IBM Plex Mono;
 }
 
@@ -34,7 +34,7 @@
   text-indent: 0px;
   resize: vertical;
   height: 60vh;
-  width: 70vw;
+  width: 60vw;
   border-left: none;
   font-size: .4rem;
   font-family: IBM Plex Mono;
@@ -50,7 +50,7 @@
 
 #progress-bar {
   padding:5px;
-  width: 70vw;
+  width: 60vw;
 }
 
 #submit-button {
