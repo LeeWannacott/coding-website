@@ -6,7 +6,26 @@ import (
 	"net/http"
 	"os/exec"
 	"strings"
+	"text/template"
 )
+
+type FormData struct {
+	Code   []string
+	Output []string
+}
+
+func runCodeAsChildProcess(code string) string {
+	fmt.Printf("code: %v\n", code)
+	// Create a new Cmd to run the Node.js process
+	cmd := exec.Command("node", "-e", code)
+	// Run the Node.js process and capture its output
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println(err)
+	}
+	// fmt.Println("output: ", string(output))
+	return string(output)
+}
 
 func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	if request.URL.Path != "/" {
@@ -15,9 +34,36 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	}
 
 	switch request.Method {
+
 	case "GET":
+
 		fmt.Println("GET!!!")
-		http.ServeFile(w, request, "index.html")
+
+		// Create a FormData struct with the data to be sent to the template
+		Code := []string{
+			"const numbers = []",
+			"for (i=0;i<10;i++){",
+			"\tnumbers.push(i)",
+			"}",
+			"console.log(numbers)",
+		}
+
+		formData := FormData{
+			Code: Code,
+		}
+		// Parse the template file
+		tmpl, err := template.ParseFiles("index.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Execute the template with the data
+		err = tmpl.Execute(w, formData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 	case "POST":
 		// Call ParseForm() to parse the raw query and update request.PostForm and request.Form.
@@ -26,22 +72,33 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
-		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
 		code := strings.Join(request.Form["code"], "\n")
-		fmt.Printf("code: %v\n", code)
+		fmt.Println("test ouput: ", request.Form["code"])
+		codeOutput := runCodeAsChildProcess(code)
+		request.Form["code-output"] = strings.Split(codeOutput, "")
 
-		// Create a new Cmd to run the Node.js process
-		cmd := exec.Command("node", "-e", code)
+		formData := FormData{
+			Code:   request.Form["code"],
+			Output: request.Form["code-output"],
+		}
+		// fmt.Println("formData: ", formData.Code)
 
-		// Run the Node.js process and capture its output
-		output, err := cmd.CombinedOutput()
+		// Parse the template file
+		tmpl, err := template.ParseFiles("index.html")
 		if err != nil {
-			fmt.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		fmt.Println("output: ", string(output))
+		// Execute the template with the data
+		err = tmpl.Execute(w, formData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
+		// http.ServeFile(w, request, "index.html")
 
-		http.ServeFile(w, request, "index.html")
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}

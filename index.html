@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Learn JavaScript</title>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
   </head>
@@ -20,7 +19,6 @@
           progressBar.value = progress + 0.01;
         }
       }
-
       function decrementProgress() {
         var progressBar = document.getElementById("progress-bar");
         var progress = progressBar.value;
@@ -45,6 +43,8 @@
       <div id="monaco-editor"></div>
     </div>
 
+    <input type="hidden" id="code-to-submit" name="code" form="code-form" />
+
     <div id="buttons-and-progress">
       <progress id="progress-bar" value="0.01"></progress>
       <div id="buttons-container">
@@ -65,41 +65,40 @@
         </button>
       </div>
     </div>
-    <form id="code-form" name="code" action="/" method="POST"></form>
-    <input type="hidden" id="code-to-submit" name="code" form="code-form" />
+    <form id="code-output" name="code-output" action="/" method="GET"></form>
+    <p>Output: {{.Output}}</p>
   </body>
   <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/min/vs/loader.js"></script>
+
+    <form id="code-form" name="code" action="/" method="POST"></form>
   <script>
-    require.config({
-      paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/min/vs" },
-    });
-    require(["vs/editor/editor.main"], function () {
-      var editor = monaco.editor.create(
-        document.getElementById("monaco-editor"),
-        {
-          value: [
-            "const numbers = []",
-            "for (i=0;i<10;i++){",
-            "\tnumbers.push(i)",
-            "}",
-            "console.log(numbers)",
-          ].join("\n"),
-          language: "javascript",
-          automaticLayout: true,
-          theme: "vs-light",
-          scrollbar: { vertical: "hidden" },
-          minimap: { enabled: false },
-          fontSize: 15,
-        }
-      );
-      console.log(editor.getValue());
-      function getValue() {
-        window.document
-          .querySelector("#code-to-submit")
-          .setAttribute("value", editor.getValue());
+var editor;
+
+  require.config({
+    paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/min/vs" },
+  });
+  require(["vs/editor/editor.main"], function () {
+    editor = monaco.editor.create(
+      document.getElementById("monaco-editor"),
+      {
+        value: `{{range .Code}}{{.}}
+{{end}} `,
+        language: "javascript",
+        automaticLayout: true,
+        theme: "vs-light",
+        scrollbar: { vertical: "hidden" },
+        minimap: { enabled: false },
+        fontSize: 15,
       }
-      getValue();
-    });
+    );
+  });
+
+  function getValue() {
+    window.document
+      .querySelector("#code-to-submit")
+      .setAttribute("value", editor.getValue());
+  }
+
   </script>
 </html>
