@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os/exec"
+	"strings"
 )
 
 func codeChallenge(w http.ResponseWriter, request *http.Request) {
@@ -25,15 +27,21 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 			return
 		}
 		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
-		code := request.Form
-		fmt.Println("code: ", code)
-		// fmt.Fprintf(w, "Name = %s\n", code)
-		// fmt.Println("Code: ", request)
-		// w.Header().Set("Content-Type", "text/plain")
-		// w.Header().Set("Access-Control-Allow-Origin", "*")
-		// fmt.Println(w, request)
+		code := strings.Join(request.Form["code"], "\n")
+		fmt.Printf("code: %v\n", code)
+
+		// Create a new Cmd to run the Node.js process
+		cmd := exec.Command("node", "-e", code)
+
+		// Run the Node.js process and capture its output
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println("output: ", string(output))
+
 		http.ServeFile(w, request, "index.html")
-		// http.PostForm("http://localhost:8080", request.Form)
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}

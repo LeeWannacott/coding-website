@@ -66,13 +66,7 @@
       </div>
     </div>
     <form id="code-form" name="code" action="/" method="POST"></form>
-    <input
-      type="text"
-      id="code-to-submit"
-      name="code"
-      form="code-form"
-      style="display: none"
-    />
+    <input type="hidden" id="code-to-submit" name="code" form="code-form" />
   </body>
   <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/min/vs/loader.js"></script>
@@ -86,7 +80,7 @@
         {
           value: [
             "const numbers = []",
-            "for (i=0;i<10;i++){ ",
+            "for (i=0;i<10;i++){",
             "\tnumbers.push(i)",
             "}",
             "console.log(numbers)",
@@ -96,6 +90,7 @@
           theme: "vs-light",
           scrollbar: { vertical: "hidden" },
           minimap: { enabled: false },
+          fontSize: 15,
         }
       );
       console.log(editor.getValue());
