@@ -27,6 +27,21 @@ func runCodeAsChildProcess(code string) string {
 	return string(output)
 }
 
+func processTemplate(w http.ResponseWriter, formData FormData) {
+	// Parse the template file
+	tmpl, err := template.ParseFiles("index.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Execute the template with the data
+	err = tmpl.Execute(w, formData)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	if request.URL.Path != "/" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
@@ -51,19 +66,7 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		formData := FormData{
 			Code: Code,
 		}
-		// Parse the template file
-		tmpl, err := template.ParseFiles("index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Execute the template with the data
-		err = tmpl.Execute(w, formData)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		processTemplate(w, formData)
 
 	case "POST":
 		// Call ParseForm() to parse the raw query and update request.PostForm and request.Form.
@@ -73,32 +76,15 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 			return
 		}
 		code := strings.Join(request.Form["code"], "\n")
-		fmt.Println("test ouput: ", request.Form["code"])
 		codeOutput := runCodeAsChildProcess(code)
-		request.Form["code-output"] = strings.Split(codeOutput, "")
+		request.Form["code-output"] = strings.Split(codeOutput, " ")
 
 		formData := FormData{
 			Code:   request.Form["code"],
 			Output: request.Form["code-output"],
 		}
-		// fmt.Println("formData: ", formData.Code)
 
-		// Parse the template file
-		tmpl, err := template.ParseFiles("index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Execute the template with the data
-		err = tmpl.Execute(w, formData)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		// fmt.Fprintf(w, "Post from website! request.PostFrom = %v\n", request.PostForm)
-		// http.ServeFile(w, request, "index.html")
-
+		processTemplate(w, formData)
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
