@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/LeeWannacott/coding-website/problemdb"
+	codeProblems "github.com/LeeWannacott/coding-website/db"
 )
 
 type FormData struct {
@@ -58,7 +58,7 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		fmt.Println("GET!!!")
 
 		// Create a FormData struct with the data to be sent to the template
-		problem, err := os.ReadFile("./js_problems/problem_1.js")
+		problem, err := os.ReadFile("./code_problems/javascript/problem_1.js")
 		if err != nil {
 			panic(err)
 		}
@@ -93,7 +93,7 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	problemdb.ProblemDatabase()
+	codeProblems.InitProblemsDatabase()
 
 	http.Handle("/tmp/", http.StripPrefix("/tmp/", http.FileServer(http.Dir("tmp"))))
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
