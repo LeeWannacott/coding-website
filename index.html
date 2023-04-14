@@ -80,8 +80,7 @@
     });
     require(["vs/editor/editor.main"], function () {
       editor = monaco.editor.create(document.getElementById("monaco-editor"), {
-        value: `{{range .Code}}{{.}}
-{{end}} `,
+        value: `{{.Code}}`,
         language: "javascript",
         automaticLayout: true,
         theme: "vs-light",
