@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -17,6 +18,12 @@ type FormData struct {
 	Code          string
 	Output        string
 	ProblemNumber int
+}
+
+func checkError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func runCodeAsChildProcess(code string) string {
@@ -49,8 +56,11 @@ func parseTemplate(w http.ResponseWriter, formData FormData) {
 func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	problemsList := codeProblems.InitProblemsDatabase()
 
-	if request.URL.Path != "/" {
-		http.Error(w, "404 not found.", http.StatusNotFound)
+	// Extract the problem index from the URL path
+	path := strings.TrimPrefix(request.URL.Path, "/")
+	index, err := strconv.Atoi(path)
+	if err != nil || index < 0 || index >= len(problemsList.Problems) {
+		http.Error(w, "Invalid problem index", http.StatusBadRequest)
 		return
 	}
 
@@ -59,21 +69,16 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	case "GET":
 
 		fmt.Println("GET!!!")
-
-		fmt.Print("yoyo", problemsList)
 		// Create a FormData struct with the data to be sent to the template
-		problem, err := os.ReadFile(problemsList.Problems[0].CodeFilePath)
-		if err != nil {
-			fmt.Print(err)
-		}
-		fmt.Print(string(problem))
+		code, err := os.ReadFile(problemsList.Problems[index].CodeFilePath)
+		checkError(err)
+		problem := problemsList.Problems[index]
 		formData := FormData{
-			Code:          string(problem),
-			Question:      problemsList.Problems[0].Question,
-			ProblemNumber: problemsList.Problems[0].ProblemID,
+			Code:          string(code),
+			Question:      problem.Question,
+			ProblemNumber: problem.ProblemID,
 		}
 		parseTemplate(w, formData)
-
 	case "POST":
 		// Call ParseForm() to parse the raw query and update request.PostForm and request.Form.
 		fmt.Printf("POST!: ")
