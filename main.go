@@ -13,8 +13,9 @@ import (
 )
 
 type FormData struct {
-	Code   string
-	Output string
+	Question string
+	Code     string
+	Output   string
 }
 
 func runCodeAsChildProcess(code string) string {
@@ -26,7 +27,6 @@ func runCodeAsChildProcess(code string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println("output: ", string(output))
 	return string(output)
 }
 
@@ -46,6 +46,8 @@ func parseTemplate(w http.ResponseWriter, formData FormData) {
 }
 
 func codeChallenge(w http.ResponseWriter, request *http.Request) {
+	problemsList := codeProblems.InitProblemsDatabase()
+
 	if request.URL.Path != "/" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -57,15 +59,16 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 
 		fmt.Println("GET!!!")
 
+		fmt.Print("yoyo", problemsList)
 		// Create a FormData struct with the data to be sent to the template
-		problem, err := os.ReadFile("./code_problems/javascript/problem_1.js")
+		problem, err := os.ReadFile(problemsList.Problems[0].CodeFilePath)
 		if err != nil {
-			panic(err)
+			fmt.Print(err)
 		}
 		fmt.Print(string(problem))
-		Code := string(problem)
 		formData := FormData{
-			Code: Code,
+			Code:     string(problem),
+			Question: problemsList.Problems[0].Question,
 		}
 		parseTemplate(w, formData)
 
@@ -93,7 +96,6 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	codeProblems.InitProblemsDatabase()
 
 	http.Handle("/tmp/", http.StripPrefix("/tmp/", http.FileServer(http.Dir("tmp"))))
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
