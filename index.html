@@ -15,16 +15,20 @@
       function incrementProgress() {
         var progressBar = document.getElementById("progress-bar");
         var progress = progressBar.value;
+        let challengeNumber = window.location.pathname.split('/')
         if (progress < 1) {
           progressBar.value = progress + 0.01;
-
+                const newNumber = Number(challengeNumber[challengeNumber.length-1])+1
+                window.location.href = `/${newNumber}`
         }
       }
       function decrementProgress() {
         var progressBar = document.getElementById("progress-bar");
         var progress = progressBar.value;
+        let challengeNumber = window.location.pathname.split('/')
         if (progress > 0) {
-          progressBar.value = progress - 0.01;
+                const newNumber = Number(challengeNumber[challengeNumber.length-1])-1
+                window.location.href = `/${newNumber}`
         }
       }
     </script>

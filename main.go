@@ -60,7 +60,8 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	path := strings.TrimPrefix(request.URL.Path, "/")
 	index, err := strconv.Atoi(path)
 	if err != nil || index < 0 || index >= len(problemsList.Problems) {
-		http.Error(w, "Invalid problem index", http.StatusBadRequest)
+		// TODO: 			fix case for submitting a solution
+		// http.Error(w, "Invalid problem index", http.StatusBadRequest)
 		return
 	}
 
