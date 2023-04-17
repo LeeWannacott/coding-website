@@ -13,9 +13,10 @@ import (
 )
 
 type FormData struct {
-	Question string
-	Code     string
-	Output   string
+	Question      string
+	Code          string
+	Output        string
+	ProblemNumber int
 }
 
 func runCodeAsChildProcess(code string) string {
@@ -67,8 +68,9 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		}
 		fmt.Print(string(problem))
 		formData := FormData{
-			Code:     string(problem),
-			Question: problemsList.Problems[0].Question,
+			Code:          string(problem),
+			Question:      problemsList.Problems[0].Question,
+			ProblemNumber: problemsList.Problems[0].ProblemID,
 		}
 		parseTemplate(w, formData)
 
