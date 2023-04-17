@@ -17,6 +17,7 @@
         var progress = progressBar.value;
         if (progress < 1) {
           progressBar.value = progress + 0.01;
+
         }
       }
       function decrementProgress() {
@@ -36,7 +37,7 @@
       <div id="monaco-editor"></div>
     </div>
 
-    <input type="hidden" id="code-to-submit" name="code" form="code-form" />
+    <input type="hidden" id="code-input" name="code" form="code-form" />
 
     <div id="buttons-and-progress">
       <progress id="progress-bar" value="0.01"></progress>
@@ -85,7 +86,7 @@
 
     function getValue() {
       window.document
-        .querySelector("#code-to-submit")
+        .querySelector("#code-input")
         .setAttribute("value", editor.getValue());
     }
   </script>

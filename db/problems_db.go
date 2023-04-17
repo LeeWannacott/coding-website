@@ -102,14 +102,25 @@ func InitProblemsDatabase() problemsList {
 
 	problemID := 1
 	codingLanguage := "javascript"
-	codeProblem := codeProblem{
+	codeProblem1 := codeProblem{
 		ProblemID:    problemID,
 		Question:     "Refactor this code so that you don't need to declare the empty variable. Hint use: <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map' target='_blank'>Array.prototype.map()<a>",
 		CodeFilePath: fmt.Sprintf("./code_problems/%v/problem_%d.js", codingLanguage, problemID),
 		Output:       "[ 'it was a good book', 'average book', 'worst book I have ever read' ]",
 		Language:     codingLanguage,
 	}
-	insertCodeProblem(db, codeProblem)
+	insertCodeProblem(db, codeProblem1)
+
+	problemID = 2
+	codingLanguage = "javascript"
+	codeProblem2 := codeProblem{
+		ProblemID:    problemID,
+		Question:     "Refactor this code to use <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce'>.reducer()</a> to sum the stars from each audiobook.",
+		CodeFilePath: fmt.Sprintf("./code_problems/%v/problem_%d.js", codingLanguage, problemID),
+		Output:       "9",
+		Language:     codingLanguage,
+	}
+	insertCodeProblem(db, codeProblem2)
 
 	fmt.Println("Inserted code problem into database")
 	problemsList := SelectCodeProblems(db, tableName)
