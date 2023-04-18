@@ -102,6 +102,17 @@ func InitProblemsDatabase() problemsList {
 
 	problemID := 1
 	codingLanguage := "javascript"
+	codeProblem3 := codeProblem{
+		ProblemID:    problemID,
+		Question:     "Change this code to use <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals'>Template literals</a>, instead of string concatenation.",
+		CodeFilePath: fmt.Sprintf("./code_problems/%v/problem_%d.js", codingLanguage, problemID),
+		Output:       "Hello, World!",
+		Language:     codingLanguage,
+	}
+	insertCodeProblem(db, codeProblem3)
+
+	problemID = 2
+	codingLanguage = "javascript"
 	codeProblem1 := codeProblem{
 		ProblemID:    problemID,
 		Question:     "Refactor this code so that you don't need to declare the empty variable. Hint use: <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map' target='_blank'>Array.prototype.map()<a>",
@@ -111,7 +122,7 @@ func InitProblemsDatabase() problemsList {
 	}
 	insertCodeProblem(db, codeProblem1)
 
-	problemID = 2
+	problemID = 3
 	codingLanguage = "javascript"
 	codeProblem2 := codeProblem{
 		ProblemID:    problemID,
