@@ -122,7 +122,6 @@ func InitProblemsDatabase() problemsList {
 	}
 	insertCodeProblem(db, codeProblem2)
 
-	fmt.Println("Inserted code problem into database")
 	problemsList := SelectCodeProblems(db, tableName)
 
 	return problemsList

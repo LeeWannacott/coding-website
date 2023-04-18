@@ -18,6 +18,7 @@ type FormData struct {
 	Code          string
 	Output        string
 	ProblemNumber int
+	UrlIndex      string
 }
 
 func checkError(err error) {
@@ -78,6 +79,7 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 			Code:          string(code),
 			Question:      problem.Question,
 			ProblemNumber: problem.ProblemID,
+			UrlIndex:      fmt.Sprintf("%v", problem.ProblemID-1),
 		}
 		parseTemplate(w, formData)
 	case "POST":
@@ -92,11 +94,14 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		fmt.Print("code:", codeOutput)
 		request.Form["code-output"] = strings.Split(codeOutput, " ")
 
+		problem := problemsList.Problems[index]
 		formData := FormData{
-			Code:   request.Form["code"][0],
-			Output: codeOutput,
+			Code:          request.Form["code"][0],
+			Output:        codeOutput,
+			Question:      problem.Question,
+			ProblemNumber: problem.ProblemID,
+			UrlIndex:      fmt.Sprintf("%v", problem.ProblemID-1),
 		}
-
 		parseTemplate(w, formData)
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
