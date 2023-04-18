@@ -14,11 +14,12 @@ import (
 )
 
 type FormData struct {
-	Question      string
-	Code          string
-	Output        string
-	ProblemNumber int
-	UrlIndex      string
+	Question         string
+	Code             string
+	Output           string
+	ProblemNumber    int
+	UrlIndex         string
+	AmountOfProblems int
 }
 
 func checkError(err error) {
@@ -63,6 +64,7 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 	if err != nil || index < 0 || index >= len(problemsList.Problems) {
 		// TODO: 			fix case for submitting a solution
 		// http.Error(w, "Invalid problem index", http.StatusBadRequest)
+		fmt.Print("Invalid problem index")
 		return
 	}
 
@@ -76,10 +78,11 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 		checkError(err)
 		problem := problemsList.Problems[index]
 		formData := FormData{
-			Code:          string(code),
-			Question:      problem.Question,
-			ProblemNumber: problem.ProblemID,
-			UrlIndex:      fmt.Sprintf("%v", problem.ProblemID-1),
+			Code:             string(code),
+			Question:         problem.Question,
+			ProblemNumber:    problem.ProblemID,
+			UrlIndex:         fmt.Sprintf("%v", problem.ProblemID-1),
+			AmountOfProblems: len(problemsList.Problems) - 1,
 		}
 		parseTemplate(w, formData)
 	case "POST":
@@ -96,11 +99,12 @@ func codeChallenge(w http.ResponseWriter, request *http.Request) {
 
 		problem := problemsList.Problems[index]
 		formData := FormData{
-			Code:          request.Form["code"][0],
-			Output:        codeOutput,
-			Question:      problem.Question,
-			ProblemNumber: problem.ProblemID,
-			UrlIndex:      fmt.Sprintf("%v", problem.ProblemID-1),
+			Code:             request.Form["code"][0],
+			Output:           codeOutput,
+			Question:         problem.Question,
+			ProblemNumber:    problem.ProblemID,
+			UrlIndex:         fmt.Sprintf("%v", problem.ProblemID-1),
+			AmountOfProblems: len(problemsList.Problems) - 1,
 		}
 		parseTemplate(w, formData)
 	default:

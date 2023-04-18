@@ -12,20 +12,21 @@
   </header>
   <body>
     <script>
-      function incrementProgress() {
+      function changeCodingChallengeURL(direction) {
         let challengeNumber = window.location.pathname.split("/");
-        if (challengeNumber[challengeNumber.length - 1] <= 0) {
           const problemNumber =
-            Number(challengeNumber[challengeNumber.length - 1]) + 1;
+            Number(challengeNumber[challengeNumber.length - 1]) + direction;
           window.location.href = `/${problemNumber}`;
         }
+      function nextCodingChallenge() {
+              console.log({{.UrlIndex}} , {{.AmountOfProblems}})
+        if ({{.UrlIndex}} < {{.AmountOfProblems}}) {
+          changeCodingChallengeURL(1)
+        }
       }
-      function decrementProgress() {
-        let challengeNumber = window.location.pathname.split("/");
-        if (challengeNumber[challengeNumber.length - 1] > 0) {
-          const problemNumber =
-            Number(challengeNumber[challengeNumber.length - 1]) - 1;
-          window.location.href = `/${problemNumber}`;
+      function backCodingChallenge() {
+        if ({{.UrlIndex}} > 0) {
+          changeCodingChallengeURL(-1)
         }
       }
     </script>
@@ -43,7 +44,7 @@
     <div id="buttons-and-progress">
       <progress id="progress-bar" value="0.01"></progress>
       <div id="buttons-container">
-        <button class="change-problem-buttons" onclick="decrementProgress()">
+        <button class="change-problem-buttons" onclick="backCodingChallenge()">
           Back
         </button>
         <button
@@ -55,7 +56,7 @@
         >
           Submit Solution
         </button>
-        <button class="change-problem-buttons" onclick="incrementProgress()">
+        <button class="change-problem-buttons" onclick="nextCodingChallenge()">
           Next
         </button>
       </div>
